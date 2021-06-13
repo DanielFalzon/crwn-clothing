@@ -1,6 +1,8 @@
 //Reducer handling specific type of action passed in the action property.
 //Payload object holds the data that would be used to update the data in the Store.
 
+import { UserActionTypes } from "./user.types";
+
 const INITIAL_STATE = {
     currentUser: null
 };
@@ -9,7 +11,7 @@ const INITIAL_STATE = {
 const userReducer = ( currentState = INITIAL_STATE, action ) => {
     //State will initially be null so we need to set an initial state.
     switch( action.type ) {
-        case 'SET_CURRENT_USER':
+        case UserActionTypes.SET_CURRENT_USER:
             return {
                 ...currentState,
                 currentUser: action.payload
