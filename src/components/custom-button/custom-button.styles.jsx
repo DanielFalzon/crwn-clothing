@@ -34,6 +34,7 @@ const googleSignInStyles  = css`
     }
 `;
 
+//Gives us flexibility to render styles in the base Button class depending on props passed.
 const getButtonStyles = props => {
     if (props.isGoogleSignIn) return googleSignInStyles;
     if (props.invertedButtonStyles ) return invertedButtonStyles;

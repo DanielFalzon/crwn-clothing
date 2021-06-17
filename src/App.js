@@ -12,6 +12,7 @@ import SignInAndSignUpPage from './pages/sign-in-and-sign-out/sign-in-and-sign-o
 import CheckoutPage from './pages/checkout/checkout.component';
 
 import { auth, createUserProfileDocument } from './firebase/firebase.utils';
+
 import { setCurrentUser } from './redux/user/user.actions';
 import { selectCurrentUser } from './redux/user/user.selector';
 
@@ -19,14 +20,20 @@ class App extends React.Component  {
 
   unsubscribedFromAuth = null;
 
+  //Runs everytime the page is refreshed.
   componentDidMount(){
     const {setCurrentUser} = this.props;
 
+    //User auth is created and retrieved from firebase.
+    //Entire app might need the user so every time a child theme renders, this is always mounted
     this.unsubscribedFromAuth = auth.onAuthStateChanged( async userAuth => {
       
       if(userAuth){
         const userRef = await createUserProfileDocument(userAuth);
 
+        //Set the current user with the data retrieved from firebase.
+        //Whenever the document changes, the snapshot is passed to the listener.
+        //The redux method setCurrentUser is passed when the onSnapshot listener is triggered.
         userRef.onSnapshot(snapshot => {
           setCurrentUser({
             id: snapshot.id,
@@ -36,6 +43,9 @@ class App extends React.Component  {
       } else {
         setCurrentUser( userAuth );
       }
+
+      //Returns an array of just title and items so that the ids are excluded
+      //addCollectionAndDocuments('collections', collectionsArray.map(({title, items}) => ({ title, items })));
 
     });
   }
