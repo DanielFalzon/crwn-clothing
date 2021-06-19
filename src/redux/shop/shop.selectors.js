@@ -8,9 +8,10 @@ export const selectCollections = createSelector(
     shop => shop.collections
 )
 
+//App can possibly be in a state where data doesn't yet exist since the firbase call is async
 export const selectCollectionsForPreview = createSelector(
     [selectCollections],
-    collections => Object.keys(collections).map(key => collections[key])
+    collections => collections ? Object.keys(collections).map(key => collections[key]) : []
 )
 
 //Doing this, we are memoizing the return of the function based on the parameter provided in the collectionUrlParam
@@ -18,5 +19,5 @@ export const selectCollection = memoize((collectionUrlParam) => createSelector(
     [selectCollections],
     //find function is being done on every collection in the array, O(n)
     //store lists of elements inside of an object (data normalisation)
-    collections => collections[collectionUrlParam]
+    collections => (collections ? collections[collectionUrlParam] : null)
 ));
