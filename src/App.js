@@ -12,6 +12,7 @@ import SignInAndSignUpPage from './pages/sign-in-and-sign-out/sign-in-and-sign-o
 import CheckoutPage from './pages/checkout/checkout.component';
 
 import { selectCurrentUser } from './redux/user/user.selector';
+import { checkUserSession } from './redux/user/user.actions';
 
 class App extends React.Component  {
 
@@ -19,29 +20,8 @@ class App extends React.Component  {
 
   //Runs everytime the page is refreshed.
   componentDidMount(){
-
-    //User auth is created and retrieved from firebase.
-      //Entire app might need the user so every time a child theme renders, this is always mounted
-
-      // this.unsubscribedFromAuth = auth.onAuthStateChanged( async userAuth => {
-
-      //   if(userAuth){
-      //     const userRef = await createUserProfileDocument(userAuth);
-
-      //     userRef.onSnapshot(snapshot => {
-      //       setCurrentUser({
-      //         id: snapshot.id,
-      //         ...snapshot.data()
-      //       });
-      //     });
-      //   } else {
-      //     setCurrentUser( userAuth );
-      //   }
-
-      //   //Returns an array of just title and items so that the ids are excluded
-      //   //addCollectionAndDocuments('collections', collectionsArray.map(({title, items}) => ({ title, items })));
-
-      // }, error => console.log(error));
+    const {checkUserSession} = this.props;
+    checkUserSession();
   }
 
   componentWillUnmount(){
@@ -68,7 +48,11 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser
 })
 
+const mapDispatchToProps = dispatch => ({
+  checkUserSession: () => dispatch(checkUserSession())
+})
+
 //Dispatch allows redux to know that the object passed will be an action
 
 //Null since App component does not use the state, it is only setting it
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
