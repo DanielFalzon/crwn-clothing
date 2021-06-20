@@ -11,9 +11,6 @@ import Header from './components/header/header.component';
 import SignInAndSignUpPage from './pages/sign-in-and-sign-out/sign-in-and-sign-out.component';
 import CheckoutPage from './pages/checkout/checkout.component';
 
-import { auth, createUserProfileDocument } from './firebase/firebase.utils';
-
-import { setCurrentUser } from './redux/user/user.actions';
 import { selectCurrentUser } from './redux/user/user.selector';
 
 class App extends React.Component  {
@@ -22,30 +19,29 @@ class App extends React.Component  {
 
   //Runs everytime the page is refreshed.
   componentDidMount(){
-    const {setCurrentUser} = this.props;
 
     //User auth is created and retrieved from firebase.
-    //Entire app might need the user so every time a child theme renders, this is always mounted
+      //Entire app might need the user so every time a child theme renders, this is always mounted
 
-    this.unsubscribedFromAuth = auth.onAuthStateChanged( async userAuth => {
+      // this.unsubscribedFromAuth = auth.onAuthStateChanged( async userAuth => {
 
-      if(userAuth){
-        const userRef = await createUserProfileDocument(userAuth);
+      //   if(userAuth){
+      //     const userRef = await createUserProfileDocument(userAuth);
 
-        userRef.onSnapshot(snapshot => {
-          setCurrentUser({
-            id: snapshot.id,
-            ...snapshot.data()
-          });
-        });
-      } else {
-        setCurrentUser( userAuth );
-      }
+      //     userRef.onSnapshot(snapshot => {
+      //       setCurrentUser({
+      //         id: snapshot.id,
+      //         ...snapshot.data()
+      //       });
+      //     });
+      //   } else {
+      //     setCurrentUser( userAuth );
+      //   }
 
-      //Returns an array of just title and items so that the ids are excluded
-      //addCollectionAndDocuments('collections', collectionsArray.map(({title, items}) => ({ title, items })));
+      //   //Returns an array of just title and items so that the ids are excluded
+      //   //addCollectionAndDocuments('collections', collectionsArray.map(({title, items}) => ({ title, items })));
 
-    }, error => console.log(error));
+      // }, error => console.log(error));
   }
 
   componentWillUnmount(){
@@ -73,9 +69,6 @@ const mapStateToProps = createStructuredSelector({
 })
 
 //Dispatch allows redux to know that the object passed will be an action
-const mapDispatchToProps = dispatch => ({
-  setCurrentUser: user => dispatch(setCurrentUser(user))
-})
 
 //Null since App component does not use the state, it is only setting it
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps)(App);
